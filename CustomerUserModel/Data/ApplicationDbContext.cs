@@ -1,4 +1,5 @@
 ﻿using CustomerUserModel.Models;
+using CustomerUserModel.Models.DisplayModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace CustomerUserModel.Data
@@ -10,8 +11,10 @@ namespace CustomerUserModel.Data
 
 		}
 
-		public DbSet<Customer> Customers { get; set; }
+		public DbSet<User> Users { get; set; }
 		public DbSet<City> Cities { get; set; }
+		public DbSet<State> States { get; set; }
 		public DbSet<Country> Countries { get; set; }
+
 	}
 }

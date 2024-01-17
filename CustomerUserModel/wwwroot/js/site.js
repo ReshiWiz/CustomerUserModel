@@ -1,18 +1,133 @@
-﻿
-
-$(document).ready(function () {
-	GetCustomer();
-
-	// Validate form on document ready
-
+﻿$(document).ready(function () {
+	GetUserData();
 });
+
+// Listing the user
+function GetUserData() {
+	$.ajax({
+		url: "/Cascade/GetUserList",
+		type: 'GET',
+		success: function (response) {
+			if (!response || response.length === 0) {
+				var message = '<tr><td colspan="5">Customer not available</td></tr>';
+				$('#tblBody').html(message);
+			} else {
+				var tableBody = '';
+				$.each(response, function (index, item) {
+					console.log(item);
+					tableBody += '<tr>';
+					tableBody += '<td>' + item.userId + '</td>';
+					tableBody += '<td>' + item.name + '</td>';
+					tableBody += '<td>' + item.countryName + '</td>';
+					tableBody += '<td>' + item.cityName + '</td>';
+					tableBody += '<td>' + item.stateName + '</td>';
+					tableBody += '<td><a href="#" class="btn btn-outline-primary btn-sm m-1" onclick="Edit(' + item.UserId + ')">Edit</a> ';
+					tableBody += '<a href="#" class="btn btn-outline-danger btn-sm m-1" onclick="Delete(' + item.UserId + ')">Delete</a></td>';
+					tableBody += '</tr>';
+				});
+				$('#tblCascade').html(tableBody);
+			}
+		},
+		error: function () {
+			alert("Unable to render the customer data");
+		}
+	});
+}
+
+// Function to get states based on the selected country
+// Assuming you have a function to get states based on the selected country
+function GetStates(countryId) {
+	$.ajax({
+		url: "/Cascade/GetState?countryId=" + countryId,
+		type: 'GET',
+		success: function (response) {
+			$("#State").html('<option value="">---select State---</option>'); // Clear existing options and add a default option
+
+			$.each(response, function (idx, item) {
+				$("#State").append('<option value="' + item.SId + '">' + item.stateName + '</option>');
+			});
+		}
+	});
+}
+
+// Function to get countries
+function GetCountry() {
+	GetStates();
+	$.ajax({
+		url: "/Cascade/GetCountries",
+		type: "GET",
+		success: function (response) {
+			$("#Country").html('');
+			$("#Country").html('<option value="">---select Country---</option>');
+			$.each(response, function (idx, item) {
+				$("#Country").append('<option value=' + item.cId + '>' + item.countryName + '</option>');
+			});
+		}
+	});
+}
+
+function GetCity(stateId) {
+	$.ajax({
+		url: "/Cascade/GetCity?stateId=" + stateId,
+		type: "GET",
+		success: function (response) {
+			console.log(response, "Items"); 
+			$("#City").html(''); 
+			$("#City").html('<option value="">---select City---</option>');
+
+			$.each(response, function (idx, item) {
+				$("#City").append('<option value="' + item.CityId + '">' + item.CityName + '</option>');
+			});
+		},
+		error: function (error) {
+			console.error("Error fetching city data:", error.responseText); // Log the error
+			$("#City").html('<option value="">Error loading cities</option>'); // Display an error message in the dropdown
+		}
+	});
+}
+
+
+
+
+
+$("#Country").on('change', function () {
+	let countryId = $(this).val();
+	GetStates(countryId);
+});
+
+// Call GetCity when the state changes
+$("#State").on('change', function () {
+	let stateId = $(this).val();
+	GetCity(stateId);
+});
+
+
+// Adding the new User
+$("#btnAddUser").click(() => {
+	GetCountry();
+	$("#cascade_Modal").modal("show");
+});
+
+$(".btn-close").click(() => {
+	$("#cascade_Modal").modal("hide");
+});
+
+
+
+
+//$(document).ready(function () {
+//	GetCustomer();
+
+//	// Validate form on document ready
+
+//});
 
 
 // Get the Customer List
 
-function GetCustomer() {
+/* function GetCustomer() {
 	$.ajax({
-		url: "/Customer/GetCustomer",
+		url: "/User/GetUserList",
 		type: "GET",
 		datatype: "json",
 		contentType: "application/json;charset=utf=8",
@@ -298,3 +413,8 @@ function FillCities(listCountryCtrl, listCityId) {
 	}
 	return;
 }
+//$(document).ready(function () {
+//	GetCustomer();
+//});
+
+*/

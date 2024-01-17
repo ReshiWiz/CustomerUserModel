@@ -1,8 +1,11 @@
 using CustomerUserModel.Data;
+using CustomerUserModel.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+//builder.Services.AddHostedService<RunServices>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
