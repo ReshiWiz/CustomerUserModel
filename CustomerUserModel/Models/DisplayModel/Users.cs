@@ -2,7 +2,7 @@
 
 namespace CustomerUserModel.Models.DisplayModel
 {
-	public class User
+	public class Users
 	{
 		[Key]
 		public int UserId { get; set; }

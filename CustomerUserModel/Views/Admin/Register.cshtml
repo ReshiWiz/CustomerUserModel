@@ -1,0 +1,27 @@
+﻿@model CustomerUserModel.Models.Udemy.Admin;
+@{
+	ViewData["Title"] = "Register";
+	Layout = "~/Views/Shared/AdminMasterLayout.cshtml";
+}
+
+<h1>Register</h1>
+
+<div class="container">
+	<div class="row mx-2">
+		@using (Html.BeginForm())
+		{
+			<span class="display-6 fw-bold text-success text-center mb-5">Register</span>
+			<div class="error-message text-danger">@ViewBag.error</div>
+			<div>
+				@Html.TextBoxFor(x => x.ad_userName, new { @class = "form-control m-2", @placeholder = "Username" })
+				@Html.ValidationMessageFor(x => x.ad_userName, "", new { @class = "error-message text-danger" })
+			</div>
+			<div>
+				@Html.PasswordFor(x => x.ad_password, new { @class = "form-control m-2", @placeholder = "Password" })
+				@Html.ValidationMessageFor(x => x.ad_password, "", new { @class = "error-message text-danger" })
+			</div>
+			<input type="submit" class="btn btn-primary w-100" value="Submit" />
+		}
+	</div>
+	<br /><br />
+</div>
